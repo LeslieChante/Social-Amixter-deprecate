@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: social_network_db
+    environment:
+      - POSTGRES_USER=devWebpro
+      - POSTGRES_PASSWORD=amixte123
+      - POSTGRES_DB=social_network_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+    environment:
+    - DB_HOST=db
+    - DB_USER=devWebpro
+    - DB_PASSWORD=amixte123
+    - DB_NAME=social_network_db
+    - JWT_SECRET=tu_secreto_super_seguro
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    command: sh -c "until npm run migrate; do echo 'Waiting for DB...'; sleep 5; done && npm start"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=devpro@env.com       # Reemplaza con tu email deseado
+      - PGADMIN_DEFAULT_PASSWORD=amixte123    # Reemplaza con tu contraseña deseada
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  db-data:
+  pgadmin-data:

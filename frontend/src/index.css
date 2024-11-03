@@ -1,0 +1,32 @@
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Puedes eliminar esta parte */
+#root {
+  /* max-width: 1280px; */
+  margin: 0;
+  padding: 0;
+  /* Quita el text-align si está afectando */
+  /* text-align: center; */
+}
+
+/* index.css */
+.bg-aurora {
+  background: radial-gradient(circle, #3281c2, #4361ee, #4cc9f0, #3dbf71);
+  animation: aurora 10s infinite alternate;
+  background-size: 400% 400%;
+}
+
+@keyframes aurora {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+
+/* index.css o App.css */
+.bg-dashboard {
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+}
