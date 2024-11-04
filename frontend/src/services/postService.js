@@ -25,10 +25,10 @@ export const createImagePost = async (content, file) => {
   return response.data;
 };
 
-// Dar "me gusta" a una publicación
+// Función para enviar "Me gusta" a una publicación
 export const likePost = async (id) => {
   const response = await api.post(`/posts/${id}/like`);
-  return response.data;
+  return response.data; // Retorna el post actualizado con el nuevo contador de likes
 };
 
 // Eliminar una publicación

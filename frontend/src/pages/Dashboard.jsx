@@ -11,11 +11,10 @@ import { getFriends } from '../services/friendsService';
 
 const Dashboard = () => {
   const [currentSection, setCurrentSection] = useState('publicaciones');
-  const [friends, setFriends] = useState([]); // Estado para amigos
+  const [friends, setFriends] = useState([]);
   const { logout } = useAuth();
 
   useEffect(() => {
-    // Cargar amigos al montar el componente
     const loadFriends = async () => {
       const friendsData = await getFriends();
       setFriends(friendsData);
@@ -33,16 +32,18 @@ const Dashboard = () => {
         return <MessagesSection friends={friends} />;
       default:
         return (
-          <div className="flex space-x-6">
-            <div className="w-2/3">
-              <h2 className="text-3xl font-semibold text-gray-800 mb-6">Publicaciones</h2>
+          <div className="flex justify-center space-x-8">
+            {/* Formulario de publicación alineado a la izquierda y fijo */}
+            <aside className="w-1/4 sticky top-20 self-start">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Crea una Publicación</h2>
               <PostForm />
+            </aside>
+
+            {/* Lista de publicaciones centrada */}
+            <div className="w-3/5">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Publicaciones</h2>
               <PostList />
             </div>
-            <aside className="w-1/3 p-4 bg-white rounded-lg shadow-md max-h-[600px] overflow-y-auto sticky top-8">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Mensajes</h3>
-              <p className="text-gray-600">Aquí estarán tus mensajes y notificaciones.</p>
-            </aside>
           </div>
         );
     }
@@ -51,7 +52,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar onSectionChange={setCurrentSection} onLogout={logout} />
-      <main className="max-w-6xl mx-auto p-8">{renderSection()}</main>
+      <main className="max-w-7xl mx-auto p-8">{renderSection()}</main>
     </div>
   );
 };

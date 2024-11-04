@@ -7,19 +7,55 @@ const friendsRoutes = require('./src/routes/friends');
 const messagesRoutes = require('./src/routes/messages');
 const userPhotosRoutes = require('./src/routes/userPhotos');
 const commentsRoutes = require('./src/routes/comments');
-const path = require('path'); // Importa 'path' para archivos estáticos
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const http = require('http'); 
+const { Server } = require('socket.io'); 
+const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: 'http://localhost:5173' })); // Habilita CORS para el frontend
+// Configuración de CORS
+const allowedOrigins = [
+  'http://localhost:5173', // Para desarrollo
+  'https://amixter.netlify.app', // Para producción
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origen no permitido por CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 app.use(express.json());
 
-// Configura la carpeta de archivos estáticos para servir las imágenes
+// Configuración de archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Rutas
+// Configuración de WebSocket para Socket.IO con CORS
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+  },
+});
+
+// Guardar la instancia de Socket.IO para usarla en otros módulos
+app.set('socketio', io);
+
+io.on('connection', (socket) => {
+  console.log('Nuevo cliente conectado:', socket.id);
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado:', socket.id);
+  });
+});
+
+// Definir rutas de la API
 app.use('/api/users', usersRoutes);
 app.use('/api/posts', postsRoutes);
 app.use('/api/friends', friendsRoutes);
@@ -27,7 +63,8 @@ app.use('/api/messages', messagesRoutes);
 app.use('/api/user-photos', userPhotosRoutes);
 app.use('/api/comments', commentsRoutes);
 
-app.listen(PORT, () => {
+// Iniciar el servidor en el puerto especificado
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 

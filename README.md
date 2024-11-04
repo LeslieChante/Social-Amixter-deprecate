@@ -1,6 +1,6 @@
 # Mi Proyecto
 
-**Enlace Público:** [Aquí puedes agregar el enlace una vez esté disponible]
+**Enlace Público:** [https://amixter.netlify.app/]
 
 ---
 
@@ -39,3 +39,4 @@ Asegúrate de tener **Docker** y **Docker Compose** instalados en tu sistema.
 ```bash
 git clone "https://github.com/LeslieChante/AmisxterSocial"
 cd "AmisxterSocial"
+```

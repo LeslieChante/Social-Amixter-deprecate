@@ -3,8 +3,14 @@ const db = require('../models/db');
 exports.sendFriendRequest = async (req, res) => {
   const { friendId } = req.body;
   const userId = req.user.userId;
+  const io = req.app.get('socketio'); // Acceso al objeto io para emitir eventos
+
   try {
     await db('friends').insert({ user_id: userId, friend_id: friendId, status: 'pending' });
+    
+    // Emitir evento de solicitud de amistad en tiempo real al receptor
+    io.to(friendId).emit('friendRequestReceived', { userId, friendId, status: 'pending' });
+    
     res.status(201).json({ message: 'Friend request sent' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to send friend request' });
@@ -14,8 +20,14 @@ exports.sendFriendRequest = async (req, res) => {
 exports.acceptFriendRequest = async (req, res) => {
   const { friendId } = req.params;
   const userId = req.user.userId;
+  const io = req.app.get('socketio');
+
   try {
     await db('friends').where({ user_id: friendId, friend_id: userId }).update({ status: 'accepted' });
+    
+    // Emitir evento de aceptación de solicitud de amistad
+    io.to(friendId).emit('friendRequestAccepted', { userId, friendId, status: 'accepted' });
+    
     res.status(200).json({ message: 'Friend request accepted' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to accept friend request' });

@@ -1,7 +1,7 @@
 // src/context/PostContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { fetchPosts, createTextPost, createImagePost, deletePost } from '../services/postService';
+import { fetchPosts, createTextPost, createImagePost, deletePost, likePost } from '../services/postService';
 
 const PostContext = createContext();
 
@@ -28,7 +28,6 @@ export const PostsProvider = ({ children }) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
 
-  // Función para eliminar una publicación
   const removePost = async (postId) => {
     try {
       await deletePost(postId);
@@ -38,8 +37,22 @@ export const PostsProvider = ({ children }) => {
     }
   };
 
+  // Define y añade la función `likePostById` para gestionar "Me gusta"
+  const likePostById = async (postId) => {
+    try {
+      const updatedPost = await likePost(postId); // Llama al servicio para incrementar "Me gusta"
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId ? { ...post, likes_count: updatedPost.likes_count } : post
+        )
+      );
+    } catch (error) {
+      console.error('Error al dar "Me gusta" al post:', error);
+    }
+  };
+
   return (
-    <PostContext.Provider value={{ posts, addTextPost, addImagePost, removePost }}>
+    <PostContext.Provider value={{ posts, addTextPost, addImagePost, removePost, likePostById }}>
       {children}
     </PostContext.Provider>
   );

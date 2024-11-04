@@ -1,3 +1,4 @@
+// src/components/PostForm.jsx
 import { useState } from 'react';
 import { usePosts } from '../context/PostContext';
 
@@ -10,7 +11,7 @@ const PostForm = () => {
 
   const handlePostSubmit = (e) => {
     e.preventDefault();
-    setShowConfirmation(true); // Muestra el modal antes de confirmar
+    setShowConfirmation(true);
   };
 
   const confirmSubmit = () => {
@@ -19,11 +20,10 @@ const PostForm = () => {
     } else if (postType === 'image' && imageFile) {
       addImagePost(content, imageFile);
     }
-    // Limpia los campos
     setContent('');
     setImageFile(null);
     setShowConfirmation(false);
-    setPostType(''); // Reinicia el tipo de post
+    setPostType('');
   };
 
   const handleCancel = () => {
@@ -31,39 +31,37 @@ const PostForm = () => {
   };
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
-      {/* Selector de tipo de publicación */}
+    <div className="space-y-6 bg-white p-6 rounded-3xl shadow-lg max-w-md mx-auto transform transition duration-300 hover:shadow-xl">
       <div className="flex justify-center space-x-4 mb-4">
         <button
           onClick={() => setPostType('text')}
-          className={`py-2 px-6 rounded-lg font-semibold ${
-            postType === 'text' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+          className={`py-3 px-6 rounded-full font-semibold transition-colors duration-200 transform hover:scale-105 ${
+            postType === 'text' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
           }`}
         >
-          Publicar texto
+          📄 Publicar texto
         </button>
         <button
           onClick={() => setPostType('image')}
-          className={`py-2 px-6 rounded-lg font-semibold ${
-            postType === 'image' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'
+          className={`py-3 px-6 rounded-full font-semibold transition-colors duration-200 transform hover:scale-105 ${
+            postType === 'image' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'
           }`}
         >
-          Publicar imagen
+          🖼️ Publicar imagen
         </button>
       </div>
 
-      {/* Formulario según el tipo de post */}
       {postType === 'text' && (
         <form onSubmit={handlePostSubmit} className="space-y-4">
           <textarea
             placeholder="¿Qué estás pensando?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full h-24 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full h-24 p-4 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-4 focus:ring-blue-400 transition duration-200"
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+            className="w-full bg-blue-500 text-white py-3 rounded-full font-semibold hover:bg-blue-600 transform hover:scale-105 transition duration-200"
           >
             Publicar texto
           </button>
@@ -76,41 +74,40 @@ const PostForm = () => {
             placeholder="Añade una descripción..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full h-24 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full h-24 p-4 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-4 focus:ring-green-400 transition duration-200"
           />
           <input
             type="file"
             accept="image/*"
             onChange={(e) => setImageFile(e.target.files[0])}
-            className="block w-full text-gray-500 mb-4"
+            className="block w-full text-gray-700 mb-4"
           />
           <button
             type="submit"
-            className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+            className="w-full bg-green-500 text-white py-3 rounded-full font-semibold hover:bg-green-600 transform hover:scale-105 transition duration-200"
           >
             Publicar imagen
           </button>
         </form>
       )}
 
-      {/* Modal de confirmación */}
       {showConfirmation && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 shadow-lg max-w-md w-full text-center">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Confirmar publicación</h2>
-            <p className="text-gray-600 mb-6">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-200">
+          <div className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full text-center transform transition duration-300">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-6">Confirmar publicación</h2>
+            <p className="text-gray-600 mb-8">
               ¿Estás seguro de que deseas publicar este {postType === 'text' ? 'texto' : 'imagen'}?
             </p>
-            <div className="flex justify-center space-x-4">
+            <div className="flex justify-center space-x-6">
               <button
                 onClick={confirmSubmit}
-                className="bg-blue-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-600 transition-colors"
+                className="bg-blue-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-600 transform hover:scale-105 transition duration-200"
               >
                 Confirmar
               </button>
               <button
                 onClick={handleCancel}
-                className="bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-400 transition-colors"
+                className="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-400 transform hover:scale-105 transition duration-200"
               >
                 Cancelar
               </button>

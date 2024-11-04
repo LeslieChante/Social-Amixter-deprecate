@@ -17,16 +17,19 @@ router.get('/', auth, postsController.getPosts);
 // Obtener una publicación específica
 router.get('/:postId', auth, postsController.getPost);
 
-// **Nueva ruta**: Obtener las publicaciones de un usuario específico
+// Obtener las publicaciones de un usuario específico
 router.get('/user/:userId', auth, postsController.getUserPosts);
 
-// Dar "me gusta" a una publicación
-router.post('/:id/like', auth, postsController.likePost);
+// Dar o quitar "me gusta" a una publicación
+router.post('/:postId/like', auth, postsController.toggleLikePost);
 
 // Obtener todos los comentarios de una publicación específica
 router.get('/:postId/comments', auth, postsController.getComments);
 
 // Eliminar una publicación
 router.delete('/:postId', auth, postsController.deletePost);
+
+router.post('/:id/toggle-like', auth, postsController.toggleLikePost);
+
 
 module.exports = router;
