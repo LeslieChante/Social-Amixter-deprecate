@@ -37,6 +37,5 @@ Asegúrate de tener **Docker** y **Docker Compose** instalados en tu sistema.
 ### Paso 1: Clonar el repositorio
 
 ```bash
-git clone "https://github.com/LeslieChante/AmisxterSocial"
-cd "AmisxterSocial"
+git clone "https://github.com/LeslieChante/Social-Amixter"
 ```
